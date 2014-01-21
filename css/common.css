@@ -1,0 +1,158 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	width: 345px;
+	height: 120px;
+	margin: 0;
+	overflow: hidden;
+}
+
+a {
+	cursor: pointer;
+}
+
+#song_left_container {
+	float: left;
+	margin: 0;
+}
+
+#song_image_container {
+}
+
+#song_func_container {
+	width: 100px;
+	font-size: 16px;
+}
+
+.flat_button {
+	background-image: -webkit-linear-gradient(#ededed, #ededed 38%, #dedede);
+	border: 1px solid rgba(0, 0, 0, 0.25);
+	border-radius: 2px;
+	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.75);
+	color: #444;
+	margin: 0;
+	text-shadow: 0 1px 0 rgb(240, 240, 240);
+	display: block;
+	outline: 0;
+	cursor: pointer;
+	float: left;
+	min-width: 50px;
+}
+
+#song_info_container {
+	float: left;
+	width: 245px;
+	margin: 1px 0;
+}
+
+#song_image {
+	width: 100px;
+	height: 100px;
+}
+
+#song_name {
+	text-decoration: None;
+	font-size: 18px;
+	font-weight: bold;
+	font-family: "Helvetica Neue",Helvetica,"Hiragino Sans GB","Microsoft Yahei",Arial,sans-serif;
+	width: 100%;
+	height: 27px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin: 0 10px;
+}
+
+#song_album {
+	color: #444;
+	outline: 0;
+	text-decoration: None;
+	display: block;
+	width: 100%;
+	height: 22px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin: 0 10px;
+}
+
+.song_control_button {
+	margin: 0 6px;
+	width: 48px;
+	height: 48px;
+	display: block;
+	float: left;
+	background-image: url('../img/moefm_buttons.png');
+	background-repeat: no-repeat;
+}
+
+#song_fav {
+}
+
+.song_fav_delete {
+	background-position: 0 -144px;
+}
+
+.song_fav_add {
+	background-position: 0 -192px;
+}
+
+#song_play {
+}
+
+.status_play {
+	background-position: 0 -48px;
+}
+
+.status_pause {
+	background-position: 0 0px;
+}
+
+#song_trash {
+}
+
+.status_nottrash {
+	background-position: 0 -240px;
+}
+
+.status_trashing {
+	background-position: 0 -288px;
+}
+
+#song_next {
+	background-position: 0 -96px;
+}
+
+#song_progress {
+	height: 5px;
+	background-color: rgb(233, 233, 233);
+}
+
+#song_progress_bar {
+	height: 5px;
+	width: 0;
+	background-color: black;
+}
+
+
+
+#login_tips {
+	font-size: 22px;
+	text-align: center;
+	margin: 6px 0;
+}
+
+#form_verifier {
+	text-align: center;
+}
+
+#input_verifier {
+	font-size: 18px;
+}
+
+#submit_verifier {
+	font-size: 18px;
+}
+
