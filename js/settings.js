@@ -1,6 +1,6 @@
 // This url is differnet from MoeFM's API.
 // It is a transfer layer to avoid the cross-site problem
-var base_url		= "https://moefm.kroderia.im/"
+var base_url		= "http://moefm.kroderia.im/"
 var request_url		= base_url + "api/request";
 var access_url		= base_url + "api/access";
 var apikey_url		= base_url + "api/get"
