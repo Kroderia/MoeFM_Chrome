@@ -12,8 +12,7 @@
   "permissions": [
       "background",
       "storage",
-      "notifications",
-      "downloads"
+      "notifications"
   ],
 
   "browser_action": {

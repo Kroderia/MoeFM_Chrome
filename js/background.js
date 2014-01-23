@@ -31,20 +31,8 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 			  		  song:		song});
 	} else if (request.action == "setfav") {
 		song.fav_sub = request.fav;
-	} else if (request.action == "download") {
-		downloadSong();
 	}
 });
-
-
-function downloadSong() {
-	opt = {
-			url:		song.url,
-			filename:	song.sub_title + ".mp3",
-			saveAs:		true
-	};
-	chrome.downloads.download(opt);
-}
 
 
 function playSong() {

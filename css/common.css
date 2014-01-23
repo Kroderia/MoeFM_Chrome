@@ -26,19 +26,26 @@ a {
 	font-size: 16px;
 }
 
+#song_image_enlarge {
+	background-image: url('../img/enlarge.svg');
+}
+
+#song_download {
+	background-image: url('../img/download.svg');
+}
+
 .flat_button {
-	background-image: -webkit-linear-gradient(#ededed, #ededed 38%, #dedede);
-	border: 1px solid rgba(0, 0, 0, 0.25);
-	border-radius: 2px;
-	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.75);
 	color: #444;
-	margin: 0;
+	margin: 0 9px;
 	text-shadow: 0 1px 0 rgb(240, 240, 240);
 	display: block;
 	outline: 0;
 	cursor: pointer;
 	float: left;
-	min-width: 50px;
+	height: 32px;
+	width: 32px;
+	background-size: 32px 32px;
+	background-repeat: no-repeat;
 }
 
 #song_info_container {
@@ -84,7 +91,7 @@ a {
 	height: 48px;
 	display: block;
 	float: left;
-	background-image: url('../img/moefm_buttons.png');
+	background-size: 48px 48px;
 	background-repeat: no-repeat;
 }
 
@@ -92,37 +99,41 @@ a {
 }
 
 .song_fav_delete {
-	background-position: 0 -144px;
+	background-image: url('../img/faving.svg');
 }
 
 .song_fav_add {
-	background-position: 0 -192px;
+	background-image: url('../img/fav.svg');
 }
 
 #song_play {
 }
 
 .status_play {
-	background-position: 0 -48px;
+	background-image: url('../img/pause.svg');
 }
 
 .status_pause {
-	background-position: 0 0px;
+	background-image: url('../img/play.svg');
 }
 
 #song_trash {
 }
 
+#song_trash:hover {
+	background-image: url('../img/trashing.svg');
+}
+
 .status_nottrash {
-	background-position: 0 -240px;
+	background-image: url('../img/trash.svg');
 }
 
 .status_trashing {
-	background-position: 0 -288px;
+	background-image: url('../img/trashing.svg');
 }
 
 #song_next {
-	background-position: 0 -96px;
+	background-image: url('../img/next.svg');
 }
 
 #song_progress {

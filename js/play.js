@@ -48,11 +48,6 @@ $("#song_trash").click(function() {
 });
 
 
-$("#song_download").click(function() {
-	sendDownloadMessage();
-});
-
-
 $("#song_image_enlarge").click(function() {
 	openUrl(song.cover.large);
 });
@@ -91,11 +86,10 @@ function sendFavLove(items) {
 	}
 	
 	sendFav(items, 1, function(data) {
-		if (data.response.information.has_error) {
-			errorPopup("操作失败...");
-			favbtn.attr("class", origin);
+		favobj	= data.response.fav;
+		if (typeof(favobj) == undefined) {
+			favbtn.attr("class", favStatusDelete);
 		} else {
-			favobj 			= data.response.fav;
 			song.fav_sub 	= favobj;
 			sendFavMessage(favobj);
 		}
@@ -111,12 +105,8 @@ function sendFavTrash(items) {
 	
 	url	= "http://api.moefou.org/fav/add.json"
 	sendFav(items, 2, function(data) {
-		if (data.response.information.has_error) {
-			errorPopup("抛弃失败...");
-			$("#song_trash").attr("class", "song_control_button status_nottrash")
-		} else {
-			sendPlayMessage();
-		}
+		$("#song_trash").attr("class", "song_control_button status_nottrash")
+		sendPlayMessage();
 	});
 }
 
@@ -158,8 +148,9 @@ function setSongInfo(newsong) {
 	favbtn = $("#song_fav");
 	imgbtn = $("#song_image");
 	abmbtn = $("#song_album");
-	nmebtn = $("#song_name")
-	tshbtn = $("#song_trash")
+	nmebtn = $("#song_name");
+	tshbtn = $("#song_trash");
+	dwnbtn = $("#song_download");
 	
 	if (song.fav_sub == undefined) {
 		favbtn.attr("class", "song_control_button song_fav_delete");
@@ -170,7 +161,9 @@ function setSongInfo(newsong) {
 	nmebtn.text(song.sub_title);
 	abmbtn.text(song.wiki_title);
 	abmbtn.attr("href", song.wiki_url);
-	tshbtn.attr("class", "song_control_button status_nottrash")
+	tshbtn.attr("class", "song_control_button status_nottrash");
+	dwnbtn.attr("href", song.url);
+	dwnbtn.attr("download", song.sub_title+".mp3");
 }
 
 
@@ -188,11 +181,8 @@ function getPlayingStatusForSetSongInfo() {
 }
 
 
-function sendDownloadMessage() {
-	sendMessage("download");
-}
-
 function sendPlayMessage() {
+	$("#song_image").attr("src", "../img/logo.png");
 	sendMessage("play");
 }
 
