@@ -1,3 +1,7 @@
+$(document).ready(function() {
+	updateBaseUrl();
+});
+
 var status = "stop"
 var song;
 var playlist;
@@ -29,6 +33,11 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 	} else if (request.action == "getstatus") {
 		sendResponse({status: 	status,
 			  		  song:		song});
+	} else if (request.action == "fav") {
+		sendFav(request.item, 
+				request.url, 
+				request.type,
+				request.target)
 	} else if (request.action == "setfav") {
 		song.fav_sub = request.fav;
 	}
@@ -37,6 +46,10 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 
 function playSong() {
 	song = playlist.pop();
+	if (song == undefined) {
+		playNext();
+		return;
+	}
 	
 	audioElement.pause();
 	audioElement.src = song.url;
@@ -56,24 +69,85 @@ function playNext() {
 	
 	url = "http://moe.fm/listen/playlist"
 	$.ajax({
-		url:		apikey_url,
+		url:		apikeyUrl,
 		type:		"GET",
-		timeout:	ajaxtimeout,
-		async:		false,
+		timeout:	ajaxTimeout,
+		async:		true,
 		data:		{
 			url:		url,
 			api:		"json",
 			api_key:	apikey,
-			perpage:	playlistcount
+			perpage:	playlistCount
 		},
 		dataType:	"json",
 		success:	function(data, status) {
-			playlist = data.response.playlist;
+			try {
+				playlist = data.response.playlist;
+			} catch (e) {
+				console.log(data);
+				this.error();
+				return;
+			}
 			playSong();
+		},
+		error:		function() {
+			playNext();
 		}
 	});
 }
 
+function sendFav(items, url, type, target) {
+	$.ajax({
+		url:		oauthUrl,
+		type:		"GET",
+		timeout:	ajaxTimeout,
+		async:		true,
+		data:		{
+			url:					url,
+			access_token:			items["access_token"],
+			access_token_secret:	items["access_token_secret"],
+			api:					"json",
+			fav_obj_type:			song.sub_type,
+			fav_obj_id:				song.sub_id,
+			fav_type:				type,
+		},
+		dataType:	"json",
+		error:		function() {
+			sendFavResponseMessage(false, null, target);
+		},
+		success:	function(data, status) {
+			if (checkIs401(data)) {
+				sendFavResponseMessage(false, "401", target);
+			}
+			sendFavResponseMessage(true, data, target);
+		}
+	});
+}
+
+function checkIs401(data) {
+	try {
+		code = data.response.error.code;
+	} catch (e) {
+		return false;
+	}
+	if (data.response.error.code == 401) {
+		chrome.storage.sync.remove(["access_token", "access_token_secret"]);
+		errorPopup("你的授权似乎已经失效, 请尝试再次授权...")
+		window.location.href = "login.html";
+		
+		return true;
+	} else {
+		return false;
+	}
+}
+
+
+function sendFavResponseMessage(status, data, target) {
+	sendMessage({"action": "favresponse",
+				 "status": status,
+				 "data": data,
+				 "target": target});
+}
 
 function sendStatusChanged(changed) {
 	status = changed;

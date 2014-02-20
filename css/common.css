@@ -34,17 +34,21 @@ a {
 	background-image: url('../img/download.svg');
 }
 
+#song_wiki {
+	background-image: url('../img/wiki.svg');
+}
+
 .flat_button {
 	color: #444;
-	margin: 0 9px;
+	margin: 0 4px 0 5px;
 	text-shadow: 0 1px 0 rgb(240, 240, 240);
 	display: block;
 	outline: 0;
 	cursor: pointer;
 	float: left;
-	height: 32px;
-	width: 32px;
-	background-size: 32px 32px;
+	height: 24px;
+	width: 24px;
+	background-size: 24px 24px;
 	background-repeat: no-repeat;
 }
 
@@ -120,15 +124,11 @@ a {
 #song_trash {
 }
 
-#song_trash:hover {
-	background-image: url('../img/trashing.svg');
-}
-
 .status_nottrash {
 	background-image: url('../img/trash.svg');
 }
 
-.status_trashing {
+.status_trashing, #song_trash:hover {
 	background-image: url('../img/trashing.svg');
 }
 

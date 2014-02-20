@@ -1,12 +1,21 @@
-var song;
-var progressBarTotalLength = parseInt($("#song_progress").css("width"));
-var progressBar = $("#song_progress_bar");
-
 $(document).ready(function() {
-	getPlayingStatusForSetSongInfo()
+	getPlayingStatusForSetSongInfo();
 });
 
+//========================
+//Define varibles
+var song;
+var progressBarTotalLength = parseInt($("#song_progress").css("width"));
+var favOrigin;
+var favbtn = $("#song_fav");
+var imgbtn = $("#song_image");
+var abmbtn = $("#song_album");
+var nmebtn = $("#song_name");
+var tshbtn = $("#song_trash");
+var dwnbtn = $("#song_download");
 
+//========================
+//Event listener
 $("#song_album").click(function() {
 	href = $(this).attr("href");
 	if (href != undefined && href != "") {
@@ -22,8 +31,7 @@ $("#song_next").click(function() {
 
 $("#song_play").click(function() {
 	getPlayStatus(function(response) {
-		status = response.status
-		if (status == "play") {
+		if (response.status == "play") {
 			sendPauseMessage();
 		} else {
 			sendResumeMessage();
@@ -38,12 +46,11 @@ $("#song_fav").click(function() {
 
 
 $("#song_trash").click(function() {
-	trashing = "song_control_button status_trashing";
-	if ($(this).attr("class") == trashing) {
+	if ($(this).attr("class") == trashStatusDuring) {
 		return;
 	}
 	
-	$(this).attr("class", trashing);
+	$(this).attr("class", trashStatusDuring);
 	chrome.storage.sync.get(sendFavTrash);
 });
 
@@ -52,92 +59,95 @@ $("#song_image_enlarge").click(function() {
 	openUrl(song.cover.large);
 });
 
+$("#song_wiki").click(function() {
+	openUrl(song.wiki_url);
+})
 
+//=======================
+//Chrome message passing
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 	if (request.action == "timeupdate") {
-		progressBar.css("width", progressBarTotalLength * request.rate);
-	} else if (request.action == "changestatus") {
+		$("#song_progress_bar").css("width", progressBarTotalLength * request.rate);
+	} else 
+		
+	if (request.action == "changestatus") {
 		$("#song_play").attr("class", "song_control_button status_"+request.status);
-	} else if (request.action == "nextsong") {
+	} else 
+		
+	if (request.action == "nextsong") {
 		setSongInfo(request.song);
+	} else 
+		
+	if (request.action == "favresponse") {
+		recvFavResponse(request.status, request.target, request.data);
 	}
 });
 
 
-function checkLogin(items) {
+//=======================
+//Function
+function isLogin(items) {
 	return (items["access_token"] != undefined && items["access_token_secret"] != undefined);
 }
 
 
 function sendFavLove(items) {
-	if (! checkLogin(items)) {
+	if (! isLogin(items)) {
 		window.location.href = "login.html";
 		return;
 	}
 	
-	favbtn = $("#song_fav");
-	origin = favbtn.attr("class");
-	if (origin == favStatusAdd) {
-		url	= "http://api.moefou.org/fav/delete.json";
+	favOrigin = favbtn.attr("class");
+	if (favOrigin == favStatusAdd) {
+		url	= favDeleteUrl;
 		favbtn.attr("class", favStatusDelete);
 	} else {
-		url	= "http://api.moefou.org/fav/add.json"
+		url	= favAddUrl;
 		favbtn.attr("class", favStatusAdd);
 	}
 	
-	sendFav(items, 1, function(data) {
-		favobj	= data.response.fav;
-		if (typeof(favobj) == undefined) {
-			favbtn.attr("class", favStatusDelete);
+	sendFavMessage(items, url, 1, "love");
+}
+
+function recvFavResponse(status, target, data) {
+	if (data == "401") {
+		return;
+	}
+	
+	if (target == "trash") {
+		if (status) {
+			sendPlayMessage();
 		} else {
-			song.fav_sub 	= favobj;
-			sendFavMessage(favobj);
+			errorPopup("载入失败...");
 		}
-	});
+	} else if (target == "love") {
+		if (status) {
+			favobj	= data.response.fav;
+			if (typeof(favobj) == undefined) {
+				favbtn.attr("class", favStatusDelete);
+			} else {
+				song.fav_sub 	= favobj;
+				sendSetFavMessage(favobj);
+			}
+		} else {
+			favBtn.attr("class", favOrigin);
+			errorPopup("载入失败...");
+		}
+	}
 }
 
 
 function sendFavTrash(items) {
-	if (! checkLogin(items)) {
+	if (! isLogin(items)) {
 		window.location.href = "login.html";
 		return;
 	}
 	
-	url	= "http://api.moefou.org/fav/add.json"
-	sendFav(items, 2, function(data) {
-		$("#song_trash").attr("class", "song_control_button status_nottrash")
-		sendPlayMessage();
-	});
+	sendFavMessage(items, favAddUrl, 2, "trash");
 }
 
 
-function sendFav(items, type, callback, error) {
-	$.ajax({
-		url:		oauth_url,
-		type:		"GET",
-		timeout:	ajaxtimeout,
-		async:		true,
-		data:		{
-			url:					url,
-			access_token:			items["access_token"],
-			access_token_secret:	items["access_token_secret"],
-			api:					"json",
-			fav_obj_type:			song.sub_type,
-			fav_obj_id:				song.sub_id,
-			fav_type:				type,
-		},
-		dataType:	"json",
-		error:		function() {
-			errorPopup("载入失败...");
-		},
-		success:	function(data, status) {
-			callback(data);
-		}
-	});
-}
-
-
-function sendFavMessage(obj) {
+function sendSetFavMessage(obj) {
 	chrome.extension.sendMessage({action:	"setfav",
 								  fav:		obj});
 }
@@ -145,23 +155,18 @@ function sendFavMessage(obj) {
 
 function setSongInfo(newsong) {
 	song = newsong;
-	favbtn = $("#song_fav");
-	imgbtn = $("#song_image");
-	abmbtn = $("#song_album");
-	nmebtn = $("#song_name");
-	tshbtn = $("#song_trash");
-	dwnbtn = $("#song_download");
 	
 	if (song.fav_sub == undefined) {
-		favbtn.attr("class", "song_control_button song_fav_delete");
+		favbtn.attr("class", favStatusDelete);
 	} else {
-		favbtn.attr("class", "song_control_button song_fav_add");
+		favbtn.attr("class", favStatusAdd);
 	}
+	
 	imgbtn.attr("src", song.cover.small)
 	nmebtn.text(song.sub_title);
 	abmbtn.text(song.wiki_title);
 	abmbtn.attr("href", song.wiki_url);
-	tshbtn.attr("class", "song_control_button status_nottrash");
+	tshbtn.attr("class", transStatusWait);
 	dwnbtn.attr("href", song.url);
 	dwnbtn.attr("download", song.sub_title+".mp3");
 }
@@ -180,9 +185,16 @@ function getPlayingStatusForSetSongInfo() {
 	});
 }
 
+function sendFavMessage(item, url, type, target) {
+	sendMessage({"action": "fav",
+				 "url": url,
+				 "item": item,
+				 "type": type,
+				 "target": target});
+}
 
 function sendPlayMessage() {
-	$("#song_image").attr("src", "../img/logo.png");
+	imgbtn.attr("src", "../img/logo.png");
 	sendMessage("play");
 }
 

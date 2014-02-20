@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	chrome.storage.sync.get(checkRequestToken);
+	chrome.storage.sync.get(checkStatus);
 });
 
 $("#submit_verifier").click(function() {
@@ -9,6 +9,14 @@ $("#submit_verifier").click(function() {
 $("#open_verifier").click(function() {
 	loadRequestToken();
 });
+
+function checkStatus(items) {
+	console.log(items)
+	if (items["base_url"] != undefined) {
+		resetAllUrl(items["base_url"]);
+	}
+	checkRequestToken(items);
+}
 
 function checkRequestToken(items) {
 	if (items["request_token"] == undefined && items["request_token_secret"] == undefined) {
@@ -29,9 +37,9 @@ function loadAccessToken(items) {
 	}
 	
 	$.ajax({
-		url:		access_url,
+		url:		accessUrl,
 		type:		"GET",
-		timeout:	ajaxtimeout,
+		timeout:	ajaxTimeout,
 		async:		false,
 		data:		{
 			request_token:			items["request_token"],
@@ -58,9 +66,9 @@ function loadAccessToken(items) {
 
 function loadRequestToken() {
 	$.ajax({
-		url:		request_url,
+		url:		requestUrl,
 		type:		"GET",
-		timeout:	ajaxtimeout,
+		timeout:	ajaxTimeout,
 		async:		false,
 		data:		{
 		},
