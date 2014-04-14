@@ -41,26 +41,24 @@ function loadAccessToken(items) {
 		type:		"GET",
 		timeout:	ajaxTimeout,
 		async:		false,
-		data:		{
-			request_token:			items["request_token"],
-			request_token_secret:	items["request_token_secret"],
-			verifier:				verifier
-		},
+		data:		{request_token:			items["request_token"],
+					 request_token_secret:	items["request_token_secret"],
+					 verifier:				verifier},
 		dataType:	"json",
 		error:		function() {
-			errorPopup("载入失败.");
-		},
+						errorPopup("载入失败.");
+					},
 		success:	function(data, status) {
-			chrome.storage.sync.remove(["request_token", "request_token_secret"]);
-			if (data.status) {
-				entry = data.info;
-				chrome.storage.sync.set({"access_token": 			entry.access_token,
-										 "access_token_secret":		entry.access_token_secret});
-				window.location.href = "index.html";
-			} else {
-				errorPopup("载入失败.");
-			}
-		}
+						chrome.storage.sync.remove(["request_token", "request_token_secret"]);
+						if (data.status) {
+							entry = data.info;
+							chrome.storage.sync.set({"access_token": 			entry.access_token,
+													 "access_token_secret":		entry.access_token_secret});
+							window.location.href = "index.html";
+						} else {
+							errorPopup("载入失败.");
+						}
+					}
 	});
 }
 
@@ -70,22 +68,19 @@ function loadRequestToken() {
 		type:		"GET",
 		timeout:	ajaxTimeout,
 		async:		false,
-		data:		{
-		},
 		dataType:	"json",
 		error:		function() {
-			errorPopup("载入失败.");
-		},
+						errorPopup("载入失败.");
+					},
 		success:	function(data, status) {
-			if (data.status == true) {
-				entry = data.info;
-				chrome.storage.sync.set({"request_token": 			entry.request_token,
-										 "request_token_secret":	entry.request_token_secret});
-				openUrl(entry.authorize_url);
-			} else {
-				errorPopup("载入失败.");
-			}
-			
-		}
+						if (data.status == true) {
+							entry = data.info;
+							chrome.storage.sync.set({"request_token": 			entry.request_token,
+													 "request_token_secret":	entry.request_token_secret});
+							openUrl(entry.authorize_url);
+						} else {
+							errorPopup("载入失败.");
+						}
+					}
 	});
 }

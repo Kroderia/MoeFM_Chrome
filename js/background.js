@@ -13,6 +13,7 @@ audioElement.addEventListener('ended', function() {
 	sendStatusChanged("pause");
 	playNext();
 });
+
 audioElement.addEventListener('error', function() {
 	errorPopup("这首歌貌似挂了...正在为你播放下一首...");
 	playNext();
@@ -34,10 +35,7 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 		sendResponse({status: 	status,
 			  		  song:		song});
 	} else if (request.action == "fav") {
-		sendFav(request.item, 
-				request.url, 
-				request.type,
-				request.target)
+		sendFav(request.item, request.url, request.type, request.target);
 	} else if (request.action == "setfav") {
 		song.fav_sub = request.fav;
 	}
@@ -73,26 +71,24 @@ function playNext() {
 		type:		"GET",
 		timeout:	ajaxTimeout,
 		async:		true,
-		data:		{
-			url:		url,
-			api:		"json",
-			api_key:	apikey,
-			perpage:	playlistCount
-		},
+		data:		{url:		url,
+					 api:		"json",
+					 api_key:	apikey,
+					 perpage:	playlistCount},
 		dataType:	"json",
 		success:	function(data, status) {
-			try {
-				playlist = data.response.playlist;
-			} catch (e) {
-				console.log(data);
-				this.error();
-				return;
-			}
-			playSong();
-		},
+						try {
+							playlist = data.response.playlist;
+						} catch (e) {
+							console.log(data);
+							this.error();
+							return;
+						}
+						playSong();
+					},
 		error:		function() {
-			playNext();
-		}
+						playNext();
+					}
 	});
 }
 
@@ -102,25 +98,23 @@ function sendFav(items, url, type, target) {
 		type:		"GET",
 		timeout:	ajaxTimeout,
 		async:		true,
-		data:		{
-			url:					url,
-			access_token:			items["access_token"],
-			access_token_secret:	items["access_token_secret"],
-			api:					"json",
-			fav_obj_type:			song.sub_type,
-			fav_obj_id:				song.sub_id,
-			fav_type:				type,
-		},
+		data:		{url:					url,
+					 access_token:			items["access_token"],
+					 access_token_secret:	items["access_token_secret"],
+					 api:					"json",
+					 fav_obj_type:			song.sub_type,
+					 fav_obj_id:			song.sub_id,
+					 fav_type:				type},
 		dataType:	"json",
 		error:		function() {
-			sendFavResponseMessage(false, null, target);
-		},
+						sendFavResponseMessage(false, null, target);
+					},
 		success:	function(data, status) {
-			if (checkIs401(data)) {
-				sendFavResponseMessage(false, "401", target);
-			}
-			sendFavResponseMessage(true, data, target);
-		}
+						if (checkIs401(data)) {
+							sendFavResponseMessage(false, "401", target);
+						}
+						sendFavResponseMessage(true, data, target);
+					}
 	});
 }
 
@@ -143,10 +137,10 @@ function checkIs401(data) {
 
 
 function sendFavResponseMessage(status, data, target) {
-	sendMessage({"action": "favresponse",
-				 "status": status,
-				 "data": data,
-				 "target": target});
+	sendMessage({"action": 	"favresponse",
+				 "status": 	status,
+				 "data": 	data,
+				 "target": 	target});
 }
 
 function sendStatusChanged(changed) {

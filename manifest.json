@@ -1,9 +1,11 @@
 {
+"update_url": "https://clients2.google.com/service/update2/crx",
+
   "manifest_version": 2,
 
   "name": "萌否电台MoeFM",
   "description": "MoeFM Chrome Extension.",
-  "version": "0.5",
+  "version": "0.6",
   "icons": {
       "128": "img/logo.png"
   },
@@ -21,6 +23,6 @@
   },
   
   "background": {
-      "page": "html/background.html"
+      "scripts": ["js/jquery.js", "js/settings.js", "js/globalfunc.js", "js/background.js"]
   }
 }

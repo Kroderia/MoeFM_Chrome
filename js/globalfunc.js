@@ -6,10 +6,9 @@ function openUrl(url) {
 }
 
 function errorPopup(info) {
-	opt = {
-			title:		"出错了!",
-			message:	info,
-			iconUrl:	"../img/error.png",
+	opt = {title:	"出错了!",
+		   message:	info,
+		   iconUrl:	"../img/error.png",
 	};
 	showNotification(opt);
 }
@@ -17,9 +16,7 @@ function errorPopup(info) {
 function showNotification(opt) {
 //	chrome.notifications is not useful now.
 //	chrome.notifications.create("cnc", opt, function() { });
-	var notification = webkitNotifications.createNotification(opt.iconUrl,
-															  opt.title,
-														      opt.message)
+	var notification = webkitNotifications.createNotification(opt.iconUrl, opt.title, opt.message);
 	notification.show();
     notification.ondisplay = function() {
     	setTimeout(function() { notification.cancel(); }, notificationtimeout);
@@ -27,11 +24,9 @@ function showNotification(opt) {
 }
 
 function simpleSongNotification(song) {
-	opt = {
-			title:		song.sub_title,
-			message:	song.wiki_title,
-			iconUrl:	song.cover.small,
-	};
+	opt = {title:	song.sub_title,
+		   message:	song.wiki_title,
+		   iconUrl:	song.cover.small};
 	showNotification(opt);
 }
 
@@ -74,17 +69,17 @@ function updateBaseUrl() {
 			timeout:	ajaxTimeout,
 			async:		true,
 			success:	function(data, status) {
-				if (urlChosen) {
-					return;
-				}
-				console.log("Transfer layer url is now set: "+this.url);
-				urlChosen = true;
-				baseUrl = this.url;
-				resetAllUrl(baseUrl);
-			},
+							if (urlChosen) {
+								return;
+							}
+							console.log("Transfer layer url is now set: "+this.url);
+							urlChosen = true;
+							baseUrl = this.url;
+							resetAllUrl(baseUrl);
+						},
 			error:		function() {
-				console.log("Warn: Connection to "+this.url+" is lost.");
-			}
+							console.log("Warn: Connection to "+this.url+" is lost.");
+						}
 		});
 	}
 }
