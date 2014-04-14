@@ -27,16 +27,26 @@ audioElement.addEventListener('timeupdate', function(){
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 	if (request.action == "play") {
 		playNext();
-	} else if (request.action == "pause") {
+	} else 
+
+	if (request.action == "pause") {
 		sendStatusChanged("pause");
-	} else if (request.action == "resume") {
+	} else 
+
+	if (request.action == "resume") {
 		sendStatusChanged("play");
-	} else if (request.action == "getstatus") {
+	} else 
+
+	if (request.action == "getstatus") {
 		sendResponse({status: 	status,
 			  		  song:		song});
-	} else if (request.action == "fav") {
+	} else 
+
+	if (request.action == "fav") {
 		sendFav(request.item, request.url, request.type, request.target);
-	} else if (request.action == "setfav") {
+	} else 
+
+	if (request.action == "setfav") {
 		song.fav_sub = request.fav;
 	}
 });
@@ -127,7 +137,8 @@ function checkIs401(data) {
 	if (data.response.error.code == 401) {
 		chrome.storage.sync.remove(["access_token", "access_token_secret"]);
 		errorPopup("你的授权似乎已经失效, 请尝试再次授权...")
-		window.location.href = "login.html";
+		sendMessage({"action": 	"redirect",
+					 "url": 	"login.html"});
 		
 		return true;
 	} else {

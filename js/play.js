@@ -80,6 +80,10 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 		
 	if (request.action == "favresponse") {
 		recvFavResponse(request.status, request.target, request.data);
+	} else 
+
+	if (request.action == "redirect") {
+		window.location.href = request.url;
 	}
 });
 
