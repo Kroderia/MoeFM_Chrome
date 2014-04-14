@@ -134,7 +134,7 @@ function recvFavResponse(status, target, data) {
 				sendSetFavMessage(favobj);
 			}
 		} else {
-			favBtn.attr("class", favOrigin);
+			favbtn.attr("class", favOrigin);
 			errorPopup("载入失败...");
 		}
 	}
