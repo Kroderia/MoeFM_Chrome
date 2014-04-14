@@ -13,6 +13,16 @@ a {
 	cursor: pointer;
 }
 
+#feedback {
+	background-image: url('../img/feedback.svg');
+	width: 24px;
+	height: 24px;
+	display: float;
+	float: right;
+	background-size: 24px 24px;
+	background-repeat: no-repeat;
+}
+
 #song_left_container {
 	float: left;
 	margin: 0;
@@ -68,7 +78,7 @@ a {
 	font-size: 18px;
 	font-weight: bold;
 	font-family: "Helvetica Neue",Helvetica,"Hiragino Sans GB","Microsoft Yahei",Arial,sans-serif;
-	width: 100%;
+	width: 85%;
 	height: 27px;
 	white-space: nowrap;
 	overflow: hidden;

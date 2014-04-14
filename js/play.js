@@ -63,6 +63,10 @@ $("#song_wiki").click(function() {
 	openUrl(song.wiki_url);
 })
 
+$("#feedback").click(function() {
+	openUrl(FEEDBACK_URL);
+});
+
 //=======================
 //Chrome message passing
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
