@@ -8,8 +8,7 @@ function openUrl(url) {
 function errorPopup(info) {
 	opt = {title:	"出错了!",
 		   message:	info,
-		   iconUrl:	"../img/error.png",
-	};
+		   iconUrl:	"../img/error.png"};
 	showNotification(opt);
 }
 

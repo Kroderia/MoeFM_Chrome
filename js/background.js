@@ -70,6 +70,8 @@ function playSong() {
 
 
 function playNext() {
+	chrome.storage.sync.get(logListen);
+
 	if (playlist != undefined && playlist.length) {
 		playSong(playlist);
 		return;
@@ -99,6 +101,29 @@ function playNext() {
 		error:		function() {
 						playNext();
 					}
+	});
+}
+
+function logListen(items) {
+	if (song == undefined) {
+		return;
+	}
+
+	url = "http://moe.fm/ajax/log&log_obj_type=sub&log_type=listen&obj_type=song&api=json"
+	$.ajax({
+		url:		oauthUrl,
+		type:		"GET",
+		timeout:	ajaxTimeout,
+		async:		true,
+		data:		{url:					url,
+					 api:					"json",
+					 log_obj_type: 			"sub",
+					 log_type: 				"listen",
+					 obj_type: 				"song",
+					 obj_id: 				song.sub_id,
+					 access_token:			items["access_token"],
+					 access_token_secret:	items["access_token_secret"]},
+		dataType:	"json",
 	});
 }
 
